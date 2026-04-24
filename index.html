@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ウェブキャリ AI活用ロードマップ</title>
+  <meta name="description" content="Web制作者としてAIと付き合うための段階的ロードマップ。フェーズ判定から具体アクションまで、受講生向けマニュアル。" />
+
+  <!-- Tailwind CDN: ユーティリティクラス用 -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Webフォント（Inter + Noto Sans JP） -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+  <style>
+    /* =========================================================
+       CSS Variables (Design Tokens)
+       ========================================================= */
+    :root {
+      /* Color: Background */
+      --bg:          #F4F8FD;   /* ベース背景（淡いブルー） */
+      --bg-soft:     #E8EFF8;   /* セクション交互塗り用のやや濃いブルー */
+      --panel:       #FFFFFF;   /* カード・パネルの白 */
+
+      /* Color: Text */
+      --ink:         #1A1A1A;   /* 本文の黒 */
+      --ink-sub:     #5C6672;   /* 補足テキスト（グレー） */
+
+      /* Color: Line / Border */
+      --line:        #D7E3F0;   /* 罫線・ボーダー */
+
+      /* Color: Accent */
+      --accent:      #2b4894;   /* メインアクセント（青） */
+      --accent-2:    #d72550;   /* サブアクセント（ピンク） */
+
+      /* Gradient: AIブランドを表す青→ピンクのグラデーション */
+      --grad: linear-gradient(25deg, #2f62a6 0%, #d72550 100%);
+
+      /* Easing: アニメーション共通のイージング */
+      --ease: cubic-bezier(.22, .61, .36, 1);
+    }
+
+    /* =========================================================
+       Reset / Base
+       ========================================================= */
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      padding: 56px 0 0;                      /* ナビバー（高さ56px）の分だけ上に余白 */
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'Inter', 'Noto Sans JP', system-ui, -apple-system, sans-serif;
+      font-feature-settings: "palt";
+      -webkit-font-smoothing: antialiased;
+      letter-spacing: .02em;
+    }
+
+    ::selection {
+      background: rgba(47, 98, 166, .18);
+      color: var(--ink);
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+      border-radius: 4px;
+    }
+
+    /* セクション遷移時、ナビバーの高さを考慮してスクロール位置をオフセット */
+    section[id],
+    header[id],
+    nav[id] {
+      scroll-margin-top: 80px;
+    }
+
+    /* =========================================================
+       Typography
+       ========================================================= */
+
+    /* 見出し用の大型ディスプレイフォント */
+    .display {
+      font-weight: 900;
+      letter-spacing: -.012em;
+      line-height: 1.22;
+    }
+
+    /* グラデーションテキスト（「AI」などを強調） */
+    .grad-text {
+      background: var(--grad);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    /* セクション冒頭の小見出し（「01 — Introduction」など） */
+    .eyebrow {
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      letter-spacing: .32em;
+      text-transform: uppercase;
+      font-size: .72rem;
+      color: var(--accent);
+    }
+
+    /* 本文系テキスト（lead = やや大きめ、sub = 標準） */
+    .body-text {
+      font-size: 1rem;
+      line-height: 2;
+      color: var(--ink-sub);
+    }
+
+    /* 色ユーティリティ */
+    .text-ink       { color: var(--ink); }
+    .text-ink-sub   { color: var(--ink-sub); }
+    .text-accent    { color: var(--accent); }
+    .border-line    { border-color: var(--line); }
+
+    /* インデックス番号（01, 02... のIndex/リスト内で使用） */
+    .idx-num {
+      font-family: 'Inter', serif;
+      font-weight: 700;
+      letter-spacing: .08em;
+      font-size: .8rem;
+      background: var(--grad);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    /* 区切りドット（「AI Roadmap ・ for Web Creators」の中点など） */
+    .dot-sep {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent-2);
+      margin: 0 .5rem;
+      vertical-align: middle;
+    }
+
+    /* アクションラベル（「ACTION 01」） */
+    .action-label {
+      font-family: 'Inter', sans-serif;
+      font-weight: 700;
+      letter-spacing: .22em;
+      font-size: .7rem;
+      color: var(--accent);
+    }
+
+    /* 下線付きリンク（ホバーでアクセント色に） */
+    .link-underline {
+      color: var(--ink);
+      font-weight: 500;
+      border-bottom: 1px solid var(--ink);
+      padding-bottom: 1px;
+      transition: color .3s, border-color .3s;
+    }
+    .link-underline:hover {
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+
+    /* =========================================================
+       Layout: Section
+       ========================================================= */
+
+    /* 標準のセクション枠（最大幅48rem、中央寄せ） */
+    .sec {
+      max-width: 48rem;
+      margin: 0 auto;
+      padding: 5rem 1.5rem;
+    }
+
+    /* セクション見出し（「はじめに」など） */
+    .sec-head {
+      font-size: 1.875rem;
+      font-weight: 900;
+      letter-spacing: -.012em;
+      line-height: 1.22;
+    }
+
+    /* 背景: ソフト（セクション交互塗り用） */
+    .bg-soft {
+      background: var(--bg-soft);
+    }
+
+    /* =========================================================
+       Bullet List
+       ========================================================= */
+
+    /* 横棒付き箇条書き（赤い短い線が左にある） */
+    .bullet-line {
+      position: relative;
+      padding-left: 1.25rem;
+    }
+    .bullet-line::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: .85em;
+      width: .5rem;
+      height: 2px;
+      background: var(--accent-2);
+    }
+
+    /* =========================================================
+       Reveal Animation（スクロールで要素がフェードイン）
+       ========================================================= */
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity .8s var(--ease), transform .8s var(--ease);
+    }
+    .reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* =========================================================
+       Cards
+       ========================================================= */
+
+    /* 基本カード（details.qa と共有） */
+    .card,
+    details.qa {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      transition:
+        transform .38s var(--ease),
+        box-shadow .38s var(--ease),
+        border-color .38s var(--ease);
+    }
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 22px 50px -28px rgba(43, 72, 148, .22);
+      border-color: #B9CFE6;
+    }
+
+    /* アクセント強めのカード（フェーズ選択カードなど） */
+    .card-accent {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      transition:
+        transform .4s var(--ease),
+        box-shadow .4s var(--ease),
+        border-color .4s var(--ease);
+      cursor: pointer;
+    }
+    .card-accent:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 32px 60px -28px rgba(43, 72, 148, .32);
+      border-color: var(--accent);
+    }
+
+    /* 番号バッジ（フェーズ内ステップリスト） */
+    .num-badge {
+      width: 2.25rem;
+      height: 2.25rem;
+      border-radius: 9999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--ink);
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: .9rem;
+    }
+
+    /* =========================================================
+       Table of Contents (TOC Chips)
+       ========================================================= */
+    .toc-chip {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      border-radius: 9999px;
+      padding: .75rem 1.25rem;
+      font-size: .875rem;
+      color: var(--ink);
+      background: var(--panel);
+      border: 1px solid var(--line);
+      transition:
+        transform .32s var(--ease),
+        background-color .3s,
+        color .3s,
+        border-color .3s;
+    }
+    .toc-chip:hover {
+      transform: translateY(-2px);
+      background: var(--ink);
+      color: #fff;
+      border-color: var(--ink);
+    }
+
+    /* =========================================================
+       Q&A / Accordion (details.qa)
+       ========================================================= */
+
+    /* 開いた状態のスタイル（影とボーダーを強調） */
+    details.qa[open] {
+      border-color: #B9CFE6;
+      box-shadow: 0 22px 50px -28px rgba(43, 72, 148, .18);
+    }
+
+    /* summary: デフォルトの三角マーカーを消して自作の矢印を出す */
+    details.qa summary {
+      list-style: none;
+      cursor: pointer;
+      position: relative;
+    }
+    details.qa summary::-webkit-details-marker {
+      display: none;
+    }
+
+    /* 開閉矢印（右下45度 → 開くと225度に回転） */
+    details.qa summary::after {
+      content: '';
+      display: block;
+      width: 9px;
+      height: 9px;
+      flex-shrink: 0;
+      border-right: 2px solid var(--accent);
+      border-bottom: 2px solid var(--accent);
+      transform: rotate(45deg);
+      transition: transform .32s var(--ease);
+      margin-top: 8px;
+      margin-left: .75rem;
+    }
+    details.qa[open] summary::after {
+      transform: rotate(225deg);
+      margin-top: 12px;
+    }
+
+    /* summary 内のレイアウト（タイトル左、矢印右） */
+    .qa-summary {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    /* 開閉時に高さをアニメーションさせるボディ部分 */
+    details.qa .qa-body {
+      overflow: hidden;
+      max-height: 0;
+      opacity: 0;
+      transition: max-height .45s var(--ease), opacity .3s, margin-top .3s;
+    }
+    details.qa[open] .qa-body {
+      max-height: 800px;
+      opacity: 1;
+      margin-top: 1rem;
+    }
+
+    /* =========================================================
+       Hero Section
+       ========================================================= */
+    /* 背景画像（hero.jpg）を敷く。右側に主要モチーフが集中する画像のため、
+       右寄せで配置してテキスト領域（左側）の余白を活かす。 */
+    .hero-wrap {
+      position: relative;
+      overflow: hidden;
+      background-image: url("hero.jpg");
+      background-size: cover;
+      background-position: right center;
+      background-repeat: no-repeat;
+    }
+
+    /* モバイル: 画像を拡大して右上の青球体だけチラ見せし、
+       テキストと球体が被らないようにする */
+    @media (max-width: 640px) {
+      .hero-wrap {
+        background-size: 200% auto;
+        background-position: 90% 20%;
+      }
+    }
+
+    /* =========================================================
+       Table（フェーズ判定表）
+       ========================================================= */
+    .clean-table th,
+    .clean-table td {
+      border-color: var(--line) !important;
+    }
+
+    /* =========================================================
+       Navbar
+       ========================================================= */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 50;
+      background: rgba(244, 248, 253, .82);
+      backdrop-filter: saturate(160%) blur(12px);
+      -webkit-backdrop-filter: saturate(160%) blur(12px);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .navbar-inner {
+      max-width: 48rem;
+      margin: 0 auto;
+      padding: .75rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-logo {
+      font-family: 'Inter', sans-serif;
+      font-weight: 700;
+      font-size: .85rem;
+      letter-spacing: .14em;
+      color: var(--ink);
+      text-decoration: none;
+    }
+
+    /* PC用のリンク群（モバイルでは非表示） */
+    .nav-links {
+      display: none;
+      gap: 1.25rem;
+      align-items: center;
+    }
+    .nav-links a {
+      font-size: .82rem;
+      color: var(--ink-sub);
+      font-weight: 500;
+      text-decoration: none;
+      padding: .25rem 0;
+      position: relative;
+      transition: color .25s;
+    }
+
+    /* ホバー時に下線がスーッと出る演出 */
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -2px;
+      height: 2px;
+      background: var(--grad);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform .28s var(--ease);
+      border-radius: 2px;
+    }
+    .nav-links a:hover {
+      color: var(--accent);
+    }
+    .nav-links a:hover::after {
+      transform: scaleX(1);
+    }
+
+    /* ハンバーガーボタン（モバイル） */
+    .nav-burger {
+      display: inline-flex;
+      flex-direction: column;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      padding: 0;
+      gap: 5px;
+      align-items: center;
+    }
+    .nav-burger span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: var(--ink);
+      transition: transform .28s, opacity .2s;
+    }
+    /* 開いた時: 3本線 → ×印 */
+    .nav-burger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-burger.open span:nth-child(2) { opacity: 0; }
+    .nav-burger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* ハンバーガー展開時に出てくるメニューパネル */
+    .nav-panel {
+      position: fixed;
+      top: 56px;
+      left: 0;
+      right: 0;
+      background: var(--panel);
+      border-bottom: 1px solid var(--line);
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height .32s var(--ease);
+      z-index: 49;
+    }
+    .nav-panel.open {
+      max-height: 420px;
+    }
+    .nav-panel ul {
+      list-style: none;
+      margin: 0;
+      padding: .5rem 0;
+    }
+    .nav-panel a {
+      display: block;
+      padding: .85rem 1.5rem;
+      color: var(--ink);
+      font-size: .95rem;
+      text-decoration: none;
+      border-bottom: 1px solid var(--line);
+    }
+    .nav-panel li:last-child a {
+      border-bottom: none;
+    }
+    .nav-panel a:hover {
+      color: var(--accent);
+      background: var(--bg-soft);
+    }
+
+    /* =========================================================
+       Responsive
+       ========================================================= */
+
+    /* タブレット以上: セクションの余白・見出し・本文を拡大 */
+    @media (min-width: 640px) {
+      .sec {
+        padding: 7rem 2rem;
+      }
+      .sec-head {
+        font-size: 2.25rem;
+      }
+      .body-text.is-lead {
+        font-size: 1.05rem;
+      }
+    }
+
+    /* PC以上: ナビリンクを表示し、ハンバーガーは非表示 */
+    @media (min-width: 768px) {
+      .nav-links  { display: flex; }
+      .nav-burger { display: none; }
+    }
+
+    /* アクセシビリティ: モーション低減設定時はアニメーションを無効化 */
+    @media (prefers-reduced-motion: reduce) {
+      .reveal {
+        opacity: 1;
+        transform: none;
+        transition: none;
+      }
+      .card:hover,
+      .card-accent:hover,
+      .toc-chip:hover {
+        transform: none;
+      }
+      html {
+        scroll-behavior: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============================================================
+       NAVBAR（固定ヘッダー）
+       ============================================================ -->
+  <header class="navbar" id="navbar">
+    <div class="navbar-inner">
+      <a href="#intro" class="nav-logo"><span class="grad-text">AI</span> Roadmap</a>
+      <nav class="nav-links">
+        <a href="#intro">はじめに</a>
+        <a href="#mindset">基本姿勢</a>
+        <a href="#common">まずやること</a>
+        <a href="#phase-check">フェーズ判定</a>
+        <a href="#phase1">フェーズ1</a>
+        <a href="#phase2">フェーズ2</a>
+        <a href="#qa">Q&amp;A</a>
+      </nav>
+      <button class="nav-burger" id="navBurger" aria-label="メニュー" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- モバイル用のハンバーガー展開パネル -->
+  <div class="nav-panel" id="navPanel">
+    <ul>
+      <li><a href="#intro">はじめに</a></li>
+      <li><a href="#mindset">基本姿勢</a></li>
+      <li><a href="#common">まずやること</a></li>
+      <li><a href="#phase-check">フェーズ判定</a></li>
+      <li><a href="#phase1">フェーズ1</a></li>
+      <li><a href="#phase2">フェーズ2</a></li>
+      <li><a href="#qa">Q&amp;A</a></li>
+    </ul>
+  </div>
+
+
+  <!-- ============================================================
+       HERO（トップビジュアル）
+       ============================================================ -->
+  <header class="hero-wrap">
+    <div class="max-w-3xl mx-auto px-6 sm:px-8 pt-20 sm:pt-28 pb-20 sm:pb-28 relative">
+      <p class="reveal eyebrow mb-8">AI Roadmap <span class="dot-sep"></span> for Web Creators</p>
+      <h1 class="reveal display text-[2.25rem] sm:text-5xl md:text-6xl text-ink">
+        <span class="grad-text">AI</span>と付き合う。<br />その地図を、<br class="sm:hidden" />ここから。
+      </h1>
+      <p class="reveal mt-8 text-base sm:text-lg leading-loose text-ink-sub max-w-xl">
+        Web制作者としてこれからの時代を生き抜くための、AI活用の段階的マニュアル。<br />
+        あなたの現在地に合わせて「いま何をすればいいか」だけを、静かに、明確に。
+      </p>
+    </div>
+  </header>
+
+
+  <!-- ============================================================
+       INDEX（目次）
+       ============================================================ -->
+  <nav id="toc" class="bg-soft">
+    <div class="max-w-3xl mx-auto px-6 sm:px-8 py-14">
+      <p class="reveal eyebrow mb-6">Index</p>
+      <ol class="reveal grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <li><a href="#intro"       class="toc-chip"><span class="idx-num">01</span>はじめに</a></li>
+        <li><a href="#mindset"     class="toc-chip"><span class="idx-num">02</span>AIに向き合う基本姿勢</a></li>
+        <li><a href="#common"      class="toc-chip"><span class="idx-num">03</span>まずやること（共通4つ）</a></li>
+        <li><a href="#phase-check" class="toc-chip"><span class="idx-num">04</span>あなたはどっちのフェーズ？</a></li>
+        <li><a href="#phase1"      class="toc-chip"><span class="idx-num">05</span>フェーズ1の進め方</a></li>
+        <li><a href="#phase2"      class="toc-chip"><span class="idx-num">06</span>フェーズ2の進め方</a></li>
+        <li><a href="#qa"          class="toc-chip"><span class="idx-num">07</span>よくある質問</a></li>
+        <li><a href="#closing"     class="toc-chip"><span class="idx-num">08</span>最後に</a></li>
+      </ol>
+    </div>
+  </nav>
+
+
+  <main>
+
+    <!-- ==========================================================
+         SECTION 01: はじめに
+         ========================================================== -->
+    <section id="intro" class="scroll-mt-8">
+      <div class="sec">
+        <p class="reveal eyebrow mb-4">01 — Introduction</p>
+        <h2 class="reveal display sec-head">はじめに</h2>
+
+        <div class="reveal mt-10">
+          <h3 class="text-lg sm:text-xl font-bold">このマニュアルの目的</h3>
+          <p class="mt-4 body-text is-lead">AIをどう使えばいいかは、人によって答えが違う。案件数ゼロの人と、月30万円稼いでいる人では、使うべきツールも投資額も違う。</p>
+          <p class="mt-4 body-text is-lead">あなたの現在地に合わせて「いま何をすればいいか」を明確にする。迷ったらこのページに戻ってきてほしい。</p>
+        </div>
+
+        <div class="reveal mt-14">
+          <h3 class="text-lg sm:text-xl font-bold">なぜAI活用が重要か</h3>
+          <ul class="mt-5 space-y-3 body-text is-lead">
+            <li class="bullet-line">提案書やサイト原稿は、AIと壁打ちすれば数時間で形になる</li>
+            <li class="bullet-line">競合リサーチも、AIに投げれば1時間かからない</li>
+            <li class="bullet-line">見積書やメール返信など、繰り返す作業はほぼ自動化できる</li>
+          </ul>
+          <p class="mt-6 body-text is-lead text-ink">AIを使わない人と使う人では、同じ時間で進められる量が2〜3倍違う。</p>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==========================================================
+         SECTION 02: 基本姿勢
+         ========================================================== -->
+    <section id="mindset" class="scroll-mt-8 bg-soft">
+      <div class="sec">
+        <p class="reveal eyebrow mb-4">02 — Mindset</p>
+        <h2 class="reveal display sec-head">AIに向き合う基本姿勢<br class="sm:hidden" /><span class="text-ink-sub text-2xl sm:text-3xl font-medium">（3原則）</span></h2>
+
+        <div class="mt-12 space-y-5">
+
+          <!-- Principle 01 -->
+          <div class="reveal card p-7 sm:p-8">
+            <p class="eyebrow mb-3">Principle 01</p>
+            <h3 class="text-lg sm:text-xl font-bold">まず試す</h3>
+            <p class="mt-3 body-text">「これAIに聞いても答えてくれるかな？」と思った時点で聞いてみる。使ってみないと何ができて何ができないかは分からない。</p>
+          </div>
+
+          <!-- Principle 02 -->
+          <div class="reveal card p-7 sm:p-8">
+            <p class="eyebrow mb-3">Principle 02</p>
+            <h3 class="text-lg sm:text-xl font-bold">AIを部下として扱う</h3>
+            <p class="mt-3 body-text">AIは優秀な新人スタッフ。曖昧な指示では動けない。「役割」「前提」「やってほしいこと」「出力形式」を言葉で伝える。</p>
+          </div>
+
+          <!-- Principle 03 -->
+          <div class="reveal card p-7 sm:p-8">
+            <p class="eyebrow mb-3">Principle 03</p>
+            <h3 class="text-lg sm:text-xl font-bold">完璧を求めない</h3>
+            <p class="mt-3 body-text">AIの出力は70点のたたき台。残り30点は、あなたの知見と判断で仕上げる。この「仕上げる力」こそWeb制作者としての価値。</p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==========================================================
+         SECTION 03: 共通アクション（まずやること）
+         ========================================================== -->
+    <section id="common" class="scroll-mt-8">
+      <div class="sec">
+        <p class="reveal eyebrow mb-4">03 — First Steps</p>
+        <h2 class="reveal display sec-head">まずやること</h2>
+
+        <div class="mt-12 space-y-4">
+
+          <!-- ACTION 01: 音声入力ツール導入（初期openでアコーディオン開状態） -->
+          <details class="qa reveal p-6 sm:p-7" open>
+            <summary class="qa-summary">
+              <div>
+                <p class="action-label">ACTION 01</p>
+                <h3 class="mt-2 text-base sm:text-lg font-bold">音声入力ツールを導入（Aqua Voice推奨）</h3>
+              </div>
+            </summary>
+            <div class="qa-body body-text">
+              <p>AIとの対話はキーボードより音声の方が圧倒的に早い。</p>
+              <ul class="mt-4 space-y-2">
+                <li class="bullet-line"><a class="link-underline" href="https://withaqua.com/" target="_blank" rel="noopener">Aqua Voice</a> をインストール</li>
+                <li class="bullet-line">マイクを設定</li>
+                <li class="bullet-line">ショートカットで呼び出せるように</li>
+              </ul>
+            </div>
+          </details>
+
+          <!-- ACTION 02: ChatGPTアカウント作成 -->
+          <details class="qa reveal p-6 sm:p-7">
+            <summary class="qa-summary">
+              <div>
+                <p class="action-label">ACTION 02</p>
+                <h3 class="mt-2 text-base sm:text-lg font-bold">ChatGPTアカウント作成（有料プラン推奨）</h3>
+              </div>
+            </summary>
+            <div class="qa-body body-text">
+              <p>無料プランでも使えるが、基本的に有料プランに加入。無料はメッセージ数制限+上位モデル非対応で実務で詰まる。</p>
+              <p class="mt-3">最上位16,800円は不要。月1,400〜3,000円のプラン（Plusなど）で十分。</p>
+              <ul class="mt-4 space-y-2">
+                <li class="bullet-line"><a class="link-underline" href="https://chatgpt.com/" target="_blank" rel="noopener">ChatGPT公式サイト</a> でアカウント作成</li>
+                <li class="bullet-line">月1,400〜3,000円のプランに加入</li>
+              </ul>
+            </div>
+          </details>
+
+          <!-- ACTION 03: 指示の基本パターン -->
+          <details class="qa reveal p-6 sm:p-7">
+            <summary class="qa-summary">
+              <div>
+                <p class="action-label">ACTION 03</p>
+                <h3 class="mt-2 text-base sm:text-lg font-bold">AI指示の基本パターン習得</h3>
+              </div>
+            </summary>
+            <div class="qa-body body-text">
+              <ol class="space-y-3">
+                <li class="flex gap-3"><span class="idx-num shrink-0 mt-1">01</span><span><span class="font-bold text-ink">具体的に指示する</span>：「以下の業種向けLPの構成案を5案、それぞれ一言理由付きで」</span></li>
+                <li class="flex gap-3"><span class="idx-num shrink-0 mt-1">02</span><span><span class="font-bold text-ink">出力形式を指定する</span>：「表形式で」「箇条書きで」「400字以内で」</span></li>
+              </ol>
+              <p class="mt-5 rounded-2xl border border-line bg-soft p-5 text-sm leading-loose">
+                <span class="font-bold text-ink">補足：</span>「あなたは〇〇の専門家です」と役割指定するテクニックもあるが、最近のAIは文脈から察してくれるので、指示の内容と出力形式が明確なら十分。
+              </p>
+            </div>
+          </details>
+
+          <!-- ACTION 04: GPTs使用開始 -->
+          <details class="qa reveal p-6 sm:p-7">
+            <summary class="qa-summary">
+              <div>
+                <p class="action-label">ACTION 04</p>
+                <h3 class="mt-2 text-base sm:text-lg font-bold">提供されるGPTsを使い始める</h3>
+              </div>
+            </summary>
+            <div class="qa-body body-text">
+              <p>受講生向けに業務で使えるGPTsを順次配布。まずは何でも触ってみる。</p>
+            </div>
+          </details>
+
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==========================================================
+         SECTION 04: フェーズ判定
+         ========================================================== -->
+    <section id="phase-check" class="scroll-mt-8 bg-soft">
+      <div class="sec">
+        <p class="reveal eyebrow mb-4">04 — Diagnose</p>
+        <h2 class="reveal display sec-head">あなたはどっちの<br class="sm:hidden" />フェーズ？</h2>
+
+        <!-- 判定表 -->
+        <div class="reveal mt-12 card p-6 sm:p-8">
+          <table class="clean-table w-full text-left text-sm sm:text-base">
+            <thead class="text-ink">
+              <tr class="border-b border-line">
+                <th class="py-4 font-bold">条件</th>
+                <th class="py-4 font-bold">判定</th>
+              </tr>
+            </thead>
+            <tbody class="text-ink-sub">
+              <tr class="border-b border-line">
+                <td class="py-4 pr-4 leading-relaxed">案件数10件未満 かつ 月収10万円未満</td>
+                <td class="py-4 font-bold text-ink">フェーズ1：AI入門</td>
+              </tr>
+              <tr class="border-b border-line">
+                <td class="py-4 pr-4 leading-relaxed">案件数10件以上 かつ 月収10万円以上</td>
+                <td class="py-4 font-bold text-ink">フェーズ2：AI本格活用</td>
+              </tr>
+              <tr>
+                <td class="py-4 pr-4 leading-relaxed">それ以外（片方だけ満たす等）</td>
+                <td class="py-4 font-bold text-ink">フェーズ1のままでOK</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- フェーズカード（Phase 01 / Phase 02 への導線） -->
+        <div class="reveal mt-10 grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <a href="#phase1" class="card-accent p-8 block">
+            <p class="eyebrow">Phase 01</p>
+            <p class="mt-3 display text-2xl">AI入門</p>
+            <p class="mt-3 text-sm leading-loose text-ink-sub">気軽にAIに触る習慣をつくる段階。投資ゼロ〜低額で始められる。</p>
+            <p class="mt-6 text-sm font-semibold text-accent">進め方を見る &rarr;</p>
+          </a>
+          <a href="#phase2" class="card-accent p-8 block">
+            <p class="eyebrow">Phase 02</p>
+            <p class="mt-3 display text-2xl">AI本格活用</p>
+            <p class="mt-3 text-sm leading-loose text-ink-sub">Claude Code導入で業務を効率化。月約2万円の投資が前提。</p>
+            <p class="mt-6 text-sm font-semibold text-accent">進め方を見る &rarr;</p>
+          </a>
+        </div>
+
+        <p class="reveal mt-8 text-sm sm:body-text">
+          フェーズ2に進むには月約2万円のAI投資（Claude Code）が必要。売上が安定してからでOK。
+        </p>
+      </div>
+    </section>
+
+
+    <!-- ==========================================================
+         SECTION 05: フェーズ1の進め方
+         ========================================================== -->
+    <section id="phase1" class="scroll-mt-8">
+      <div class="sec">
+        <p class="reveal eyebrow mb-4">05 — Phase 01</p>
+        <h2 class="reveal display sec-head">フェーズ1の進め方</h2>
+
+        <!-- ゴール -->
+        <div class="reveal mt-12">
+          <h3 class="text-lg sm:text-xl font-bold">ゴール</h3>
+          <p class="mt-4 body-text is-lead">普段の業務すべてで、気軽にAIに触る習慣をつくる。営業でも制作でもクライアント対応でも経理でも、何でもAIに聞いてみるスタンス。</p>
+        </div>
+
+        <!-- アクション -->
+        <div class="reveal mt-14">
+          <h3 class="text-lg sm:text-xl font-bold">アクション</h3>
+          <ol class="mt-6 space-y-4">
+            <li class="card p-6 flex gap-5 items-start">
+              <span class="num-badge shrink-0">1</span>
+              <div><p class="font-bold text-ink">音声入力でAIに話しかける練習</p></div>
+            </li>
+            <li class="card p-6 flex gap-5 items-start">
+              <span class="num-badge shrink-0">2</span>
+              <div>
+                <p class="font-bold text-ink">提供されるGPTsを業務で使い倒す</p>
+                <p class="mt-2 body-text">営業準備／制作業務／クライアント対応／経理事務すべて</p>
+              </div>
+            </li>
+            <li class="card p-6 flex gap-5 items-start">
+              <span class="num-badge shrink-0">3</span>
+              <div>
+                <p class="font-bold text-ink">ChatGPTで日常的な疑問を相談する</p>
+                <p class="mt-2 body-text">業務以外も含めて気になったら聞く</p>
+              </div>
+            </li>
+          </ol>
+        </div>
+
+        <!-- 卒業目安 -->
+        <div class="reveal mt-14">
+          <h3 class="text-lg sm:text-xl font-bold">卒業目安</h3>
+          <ul class="mt-5 space-y-3 body-text is-lead">
+            <li class="bullet-line">案件数10件以上 かつ 月収10万円以上を安定達成</li>
+            <li class="bullet-line">AIへの指示に抵抗がない</li>
+            <li class="bullet-line">「こういう業務をAIに任せたい」という具体的な要望が自分で出せる</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==========================================================
+         SECTION 06: フェーズ2の進め方
+         ========================================================== -->
+    <section id="phase2" class="scroll-mt-8 bg-soft">
+      <div class="sec">
+        <p class="reveal eyebrow mb-4">06 — Phase 02</p>
+        <h2 class="reveal display sec-head">フェーズ2の進め方</h2>
+
+        <!-- ゴール -->
+        <div class="reveal mt-12">
+          <h3 class="text-lg sm:text-xl font-bold">ゴール</h3>
+          <p class="mt-4 body-text is-lead">Claude Codeを導入して、業務を本格的に効率化する体制を構築。</p>
+        </div>
+
+        <!-- セットアップ手順（6ステップ） -->
+        <div class="reveal mt-14">
+          <h3 class="text-lg sm:text-xl font-bold">セットアップ 6ステップ</h3>
+          <ol class="mt-6 space-y-3">
+            <li class="card p-6 flex gap-5 items-start">
+              <span class="num-badge shrink-0">1</span>
+              <p class="body-text pt-1">
+                <a class="link-underline" href="https://claude.com/claude-code" target="_blank" rel="noopener">Claude Code公式サイト</a> からアプリ版DL +
+                <a class="link-underline" href="https://claude.ai/upgrade" target="_blank" rel="noopener">Maxプラン</a> 契約（月約2万円）
+              </p>
+            </li>
+            <li class="card p-6 flex gap-5 items-start">
+              <span class="num-badge shrink-0">2</span>
+              <p class="body-text pt-1">
+                <a class="link-underline" href="https://ipv4.google.com/intl/ja/drive/download/" target="_blank" rel="noopener">Googleドライブアプリ</a> をインストール
+              </p>
+            </li>
+            <li class="card p-6 flex gap-5 items-start">
+              <span class="num-badge shrink-0">3</span>
+              <p class="body-text pt-1">フォルダ構成をセットアップ（専用プロンプトでワンクリック）</p>
+            </li>
+            <li class="card p-6 flex gap-5 items-start">
+              <span class="num-badge shrink-0">4</span>
+              <p class="body-text pt-1">業務の棚卸し</p>
+            </li>
+            <li class="card p-6 flex gap-5 items-start">
+              <span class="num-badge shrink-0">5</span>
+              <p class="body-text pt-1">AI化の優先順位づけ（頻度 × 定型化 × 時間）</p>
+            </li>
+            <li class="card p-6 flex gap-5 items-start">
+              <span class="num-badge shrink-0">6</span>
+              <p class="body-text pt-1">最初の1業務をAI化</p>
+            </li>
+          </ol>
+        </div>
+
+        <!-- 目指す状態 -->
+        <div class="reveal mt-14">
+          <h3 class="text-lg sm:text-xl font-bold">目指す状態</h3>
+          <ul class="mt-5 space-y-3 body-text is-lead">
+            <li class="bullet-line">週10時間以上の業務時間を削減</li>
+            <li class="bullet-line">新しい業務でも自分でAI化の設計ができる</li>
+            <li class="bullet-line">案件数・単価を上げる余裕ができている</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==========================================================
+         SECTION 07: よくある質問 (Q&A)
+         ========================================================== -->
+    <section id="qa" class="scroll-mt-8">
+      <div class="sec">
+        <p class="reveal eyebrow mb-4">07 — Q &amp; A</p>
+        <h2 class="reveal display sec-head">よくある質問</h2>
+
+        <div class="mt-12 space-y-4">
+
+          <details class="qa reveal p-6 sm:p-7">
+            <summary class="qa-summary">
+              <h3 class="text-base sm:text-lg font-bold">Q1. ChatGPT有料プランは必要？</h3>
+            </summary>
+            <div class="qa-body body-text">
+              <p>基本的に推奨。月1,400〜3,000円で十分。最上位16,800円は不要。</p>
+            </div>
+          </details>
+
+          <details class="qa reveal p-6 sm:p-7">
+            <summary class="qa-summary">
+              <h3 class="text-base sm:text-lg font-bold">Q2. Claude Code と ChatGPT の違いは？</h3>
+            </summary>
+            <div class="qa-body body-text">
+              <p>ChatGPTは対話型（話しかけて答えをもらう）、Claude Codeは業務を任せるツール（自分のPC上でファイル操作や業務フロー実行まで）。フェーズ2で本格活用するのはClaude Code。</p>
+            </div>
+          </details>
+
+          <details class="qa reveal p-6 sm:p-7">
+            <summary class="qa-summary">
+              <h3 class="text-base sm:text-lg font-bold">Q3. AIに仕事を取られない？</h3>
+            </summary>
+            <div class="qa-body body-text">
+              <p>AIが得意なのは「作業」。代替不能なのは「クライアントヒアリング」「案件ごとの判断」「信頼関係構築」「進行管理」。AIで作業を効率化して、こうした本質工程に時間を使う側に回る。</p>
+            </div>
+          </details>
+
+          <details class="qa reveal p-6 sm:p-7">
+            <summary class="qa-summary">
+              <h3 class="text-base sm:text-lg font-bold">Q4. GPTsの使い方が分からない時は？</h3>
+            </summary>
+            <div class="qa-body body-text">
+              <p>Discordで共有。運営側で改善する。</p>
+            </div>
+          </details>
+
+          <details class="qa reveal p-6 sm:p-7">
+            <summary class="qa-summary">
+              <h3 class="text-base sm:text-lg font-bold">Q5. フェーズ移行のタイミングは？</h3>
+            </summary>
+            <div class="qa-body body-text">
+              <p>案件10件以上 かつ 月収10万円以上で移行OK。</p>
+            </div>
+          </details>
+
+          <details class="qa reveal p-6 sm:p-7">
+            <summary class="qa-summary">
+              <h3 class="text-base sm:text-lg font-bold">Q6. 音声入力ができない？</h3>
+            </summary>
+            <div class="qa-body body-text">
+              <p><span class="font-bold text-ink">音声入力は必須</span>。テキスト入力で済ませるとAI活用の伸びしろを削る。イヤホンマイク、時間帯調整、人目のない空間活用など環境を工夫して導入。</p>
+            </div>
+          </details>
+
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==========================================================
+         SECTION 08: 最後に
+         ========================================================== -->
+    <section id="closing" class="scroll-mt-8 bg-soft">
+      <div class="sec">
+        <p class="reveal eyebrow mb-4">08 — Closing</p>
+        <h2 class="reveal display sec-head">最後に</h2>
+        <p class="reveal mt-8 text-base sm:text-[1.1rem] leading-loose text-ink-sub">
+          AI活用は一気に全部やろうとすると挫折する。まずは共通アクション4つを1週間で終わらせて、フェーズ1の習慣づけから始める。
+        </p>
+        <p class="reveal mt-5 text-base sm:text-[1.1rem] leading-loose text-ink-sub">
+          完璧ではなく<span class="text-ink font-bold">「使い続けること」</span>が大事。3ヶ月後に手応えが変わる。詰まったらDiscordで相談。
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+
+  <!-- ============================================================
+       JavaScript
+       ============================================================ -->
+  <script>
+    /**
+     * Reveal Animation:
+     * `.reveal` クラスの要素をビューポートに入った瞬間にフェードインさせる。
+     * IntersectionObserver 非対応環境ではすべて即座に表示。
+     */
+    (function initRevealAnimation() {
+      var revealTargets = document.querySelectorAll('.reveal');
+
+      // フォールバック: IntersectionObserver 非対応なら全要素を即表示
+      if (!('IntersectionObserver' in window)) {
+        revealTargets.forEach(function (el) {
+          el.classList.add('is-visible');
+        });
+        return;
+      }
+
+      // 画面に8%入った時点で表示する
+      var revealObserver = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            revealObserver.unobserve(entry.target); // 一度表示したら監視解除
+          }
+        });
+      }, {
+        root: null,
+        rootMargin: '0px 0px -8% 0px',
+        threshold: .08
+      });
+
+      revealTargets.forEach(function (el) {
+        revealObserver.observe(el);
+      });
+    })();
+
+
+    /**
+     * Mobile Navigation:
+     * ハンバーガーボタンでナビパネルを開閉する。
+     * アンカーリンク（#xxx）クリック時は自動でメニューを閉じる。
+     */
+    (function initMobileNav() {
+      var burgerButton = document.getElementById('navBurger');
+      var navPanel     = document.getElementById('navPanel');
+
+      // ナビを閉じる共通処理
+      function closeMenu() {
+        if (burgerButton) {
+          burgerButton.classList.remove('open');
+          burgerButton.setAttribute('aria-expanded', 'false');
+        }
+        if (navPanel) {
+          navPanel.classList.remove('open');
+        }
+      }
+
+      // ハンバーガー: クリックで開閉トグル
+      if (burgerButton && navPanel) {
+        burgerButton.addEventListener('click', function () {
+          var isOpen = burgerButton.classList.toggle('open');
+          navPanel.classList.toggle('open', isOpen);
+          burgerButton.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        });
+      }
+
+      // ページ内リンク: クリックで自動的にメニューを閉じる
+      document.querySelectorAll('a[href^="#"]').forEach(function (anchor) {
+        anchor.addEventListener('click', function () {
+          closeMenu();
+        });
+      });
+    })();
+  </script>
+
+</body>
+</html>
